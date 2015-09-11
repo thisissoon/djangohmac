@@ -34,7 +34,7 @@ class Hmac(object):
 
     def get_signature(self, request):
         try:
-            return six.b(request.META[self.header])
+            return request.META[self.header]
         except KeyError:
             raise SecretKeyIsNotSet()
 

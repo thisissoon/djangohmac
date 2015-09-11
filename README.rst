@@ -1,4 +1,4 @@
-Flask-HMAC
+Django-HMAC
 ==========
 
 |circle| |downloads| |version| |license|
@@ -14,11 +14,6 @@ settings.py
 ~~~~~~~~~~~
 
 .. sourcecode:: python
-
-    INSTALLED_APPS = (
-        # ...
-        'djangohmac',
-    )
 
     MIDDLEWARE_CLASSES = (
         # ...
@@ -50,8 +45,8 @@ To run all tests
     docker run -it -v $PWD:/src -w /src ikalnitsky/pythonista tox
 
 
-.. |circle| image:: https://img.shields.io/circleci/project/thisissoon/django-hmac.svg
-    :target: https://circleci.com/gh/thisissoon/django-hmac
+.. |circle| image:: https://img.shields.io/circleci/project/thisissoon/djangohmac.svg
+    :target: https://circleci.com/gh/thisissoon/djangohmac
 
 .. |downloads| image:: http://img.shields.io/pypi/dm/djangohmac.svg
     :target: https://pypi.python.org/pypi/djangohmac

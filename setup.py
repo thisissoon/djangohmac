@@ -29,8 +29,7 @@ setup(
     ],
     install_requires=[
         'django',
-        'six',
-        'ipdb'
+        'six>=1.9.0',
     ],
     classifiers=[
         'Framework :: Djanog',

@@ -35,11 +35,14 @@ def decode_string(value):
 class Hmac(object):
 
     def __init__(self):
-        self.hmac_key = six.b(settings.HMAC_SECRET)
         self.header = getattr(settings, 'HMAC_HEADER', 'Signature')
         self.digestmod = getattr(settings, 'HMAC_DIGESTMOD', hashlib.sha256)
         self.hmac_disarm = getattr(settings, 'HMAC_DISABLE', False)
         self.hmac_keys = getattr(settings, 'HMAC_SECRETS', {})
+
+    @property
+    def hmac_key(self):
+        return six.b(settings.HMAC_SECRET)
 
     def get_signature(self, request):
         try:

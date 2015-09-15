@@ -32,7 +32,7 @@ setup(
         'six>=1.9.0',
     ],
     classifiers=[
-        'Framework :: Djanog',
+        'Framework :: Django',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',

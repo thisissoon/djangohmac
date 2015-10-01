@@ -61,7 +61,7 @@ class Hmac(object):
             key (str): secret key of another app
         '''
         hmac_token_server = self._hmac_factory(encode_string(data), key).digest()
-        hmac_token_server = base64.urlsafe_b64encode(hmac_token_server)
+        hmac_token_server = base64.b64encode(hmac_token_server)
         return hmac_token_server
 
     def make_hmac_for(self, name, data=''):
@@ -74,7 +74,7 @@ class Hmac(object):
             key = self.hmac_keys[name]
         except KeyError:
             raise UnknownKeyName()
-        token = base64.urlsafe_b64encode(six.b(
+        token = base64.b64encode(six.b(
             '{0}:{1}'.format(name, decode_string(self.make_hmac(data, key)))
         ))
         return token

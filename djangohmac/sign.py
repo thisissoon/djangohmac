@@ -93,7 +93,7 @@ class Hmac(object):
     def _parse_multiple_signature(self, signature):
         try:
             return decode_string(
-                base64.urlsafe_b64decode(decode_string(signature))
+                base64.b64decode(decode_string(signature))
             ).split(':')
         except (TypeError, binascii.Error):
             raise InvalidSignature()

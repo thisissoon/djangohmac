@@ -1,7 +1,11 @@
 Change Log
 ----------
 
-1.0.3
+1.0.5
+~~~~~
+- Fix: Django HTTP headers
+
+1.0.4
 ~~~~~
 - Fix: use base64.b64encode instead of base64.urlsafe_b64encode
 

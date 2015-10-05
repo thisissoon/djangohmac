@@ -17,18 +17,18 @@ class HmacTestCase(TestCase):
     def test_signature_is_different_for_different_data(self):
         assert self.hmac.make_hmac('a') != self.hmac.make_hmac('b')
 
-    def test_replace_secret_key(self):
+    def test_custom_secret_key(self):
         assert self.hmac.make_hmac(key='a') == self.hmac.make_hmac(key='a')
         assert self.hmac.make_hmac(key='a') != self.hmac.make_hmac(key='b')
 
     def test_valid_multiple_signatures_should_pass(self):
         signature = self.hmac.make_hmac_for('service')
-        request = self.factory.get('/example', **{self.hmac.header: signature})
+        request = self.factory.get('/example', **{'HTTP_' + self.hmac.header.upper(): signature})
         assert self.hmac.validate_multiple_signatures(request)
 
     def test_invalid_multiple_signatures_should_raice_exception(self):
         signature = self.hmac.make_hmac_for('service', 'some data')
-        request = self.factory.get('/example', **{self.hmac.header: signature})
+        request = self.factory.get('/example', **{'HTTP_' + self.hmac.header.upper(): signature})
         with self.assertRaises(InvalidSignature):
             self.hmac.validate_multiple_signatures(request)
 

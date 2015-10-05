@@ -32,6 +32,7 @@ def encode_string(value):
 def decode_string(value):
     return value if isinstance(value, six.string_types) else value.decode('utf-8')
 
+
 class Hmac(object):
 
     def __init__(self):
@@ -46,7 +47,7 @@ class Hmac(object):
 
     def get_signature(self, request):
         try:
-            return request.META[self.header]
+            return request.META['HTTP_{}'.format(self.header.upper())]
         except KeyError:
             raise SecretKeyIsNotSet()
 

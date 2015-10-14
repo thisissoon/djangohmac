@@ -1,6 +1,3 @@
-# Third Party Libs
-from django.core.exceptions import PermissionDenied
-
 from .sign import HmacException, shmac
 
 
@@ -11,7 +8,7 @@ class GlobalHmacMiddleware(object):
         try:
             shmac.validate_signature(request)
         except HmacException:
-            raise PermissionDenied()
+            shmac.abort()
 
 
 class MultipleHmacMiddleware(object):
@@ -22,4 +19,4 @@ class MultipleHmacMiddleware(object):
         try:
             shmac.validate_multiple_signatures(request)
         except HmacException:
-            raise PermissionDenied()
+            shmac.abort()

@@ -1,6 +1,6 @@
-'''
+"""
 Dummy django settings
-'''
+"""
 
 import os
 

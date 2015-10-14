@@ -57,21 +57,23 @@ class Hmac(object):
         return hmac.new(key, data, digestmod=self.digestmod)
 
     def make_hmac(self, data='', key=None):
-        ''' Generates HMAC key
+        """ Generates HMAC key
+
         Arguments:
             data (str): HMAC message
             key (str): secret key of another app
-        '''
+        """
         hmac_token_server = self._hmac_factory(encode_string(data), key).digest()
         hmac_token_server = base64.b64encode(hmac_token_server)
         return hmac_token_server
 
     def make_hmac_for(self, name, data=''):
-        ''' Generates HMAC key for named key
+        """ Generates HMAC key for named key
+
         Arguments:
             name (str): key name from HMAC_SECRETS dict
             data (str): HMAC message
-        '''
+        """
         try:
             key = self.hmac_keys[name]
         except KeyError:
@@ -82,14 +84,14 @@ class Hmac(object):
         return token
 
     def validate_signature(self, request):
-        ''' Validate signature from djagno request
+        """ Validate signature from djagno request
 
         Arguments:
             request (request): Django request class
 
         Returns:
             boolen
-        '''
+        """
         if self.hmac_disarm:
             return True
         hmac_token_client = self.get_signature(request)
@@ -101,14 +103,14 @@ class Hmac(object):
         return True
 
     def _parse_multiple_signature(self, signature):
-        ''' Split signature to user name and signature
+        """ Split signature to user name and signature
 
         Arguments:
             signature (string): Signature genrated by `make_hmac_for`
 
         Returns:
             tuple of service name and signature
-        '''
+        """
         try:
             return decode_string(
                 base64.b64decode(decode_string(signature))
@@ -117,7 +119,7 @@ class Hmac(object):
             raise InvalidSignature()
 
     def validate_multiple_signatures(self, request, only=None):
-        ''' Validate signature from djagno request. But it takes key from
+        """ Validate signature from djagno request. But it takes key from
         `HMAC_SECRETS` list
 
         Arguments:
@@ -126,7 +128,7 @@ class Hmac(object):
 
         Returns:
             boolen
-        '''
+        """
         if self.hmac_disarm:
             return True
         signature = self.get_signature(request)
@@ -141,11 +143,11 @@ class Hmac(object):
         return True
 
     def abort(self):
-        ''' Called when validation failed.
+        """ Called when validation failed.
 
         Raises:
             PermissionDenied()
-        '''
+        """
         raise PermissionDenied()
 
 

@@ -1,6 +1,10 @@
 Change Log
 ----------
 
+1.2.0
+~~~~~
+- Decorators
+
 1.0.5
 ~~~~~
 - Fix: Django HTTP headers

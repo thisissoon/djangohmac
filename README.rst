@@ -1,54 +1,34 @@
 Django-HMAC
 ==========
 
-|circle| |downloads| |version| |license|
+|circle| |downloads| |version| |license| |docs|
 
 This module provides a middleware for HMAC signature Django views. It's simply
 designed to check that a client is entitled to access routes, based on the fact
 that it must possess a copy of the secret key.
 
-The app can use neither single secret key which is used in every request or multiple
-secret keys.
+Key features:
+~~~~~~~~~~~~~
+- HMAC Middleware
+- HMAC View decorators
+- Multiple keys for more services
+- Service restricted access
 
-Usage
------
-
-settings.py
-~~~~~~~~~~~
-
-.. sourcecode:: python
-
-    MIDDLEWARE_CLASSES = (
-        # ...
-        'djangohmac.middleware.GlobalHmacMiddleware',
-        # or 'djangohmac.middleware.MultipleHmacMiddleware'
-    )
-
-    HMAC_SECRET = 'HMAC_SECRET'  # for global HMAC middleware
-    # HMAC_SECRETS = {  # for multiple HMAC middleware
-    #    'service': 'HMAC_SECRET'
-    # }
-
-Client
-~~~~~~
+Small example
+~~~~~~~~~~~~~
 
 .. sourcecode:: python
 
-    from djangohmac.sign import shmac
+    class SignedView(View):
 
-    sig = shmac.make_hmac()  # generate signature
-    response = requests.get(
-        '/hmac_auth_view',
-        headers={hmac.header: sig}
-    )
+        @decorators.auth()
+        def get(self, request):
+            return HttpResponse("for all services")
 
-    # or
+        @decorators.auth(only=['userservice'])
+        def post(self, request):
+            return HttpResponse("Only for user service")
 
-    sig = shmac.make_hmac_for('service')  # generate signature for multiple HMAC
-    response = requests.get(
-        '/hmac_auth_view',
-        headers={hmac.header: sig}
-    )
 
 Dev
 ---
@@ -71,3 +51,6 @@ To run all tests
 
 .. |license| image:: http://img.shields.io/pypi/l/djangohmac.svg
     :target: https://pypi.python.org/pypi/djangohmac
+
+.. |docs| image:: https://readthedocs.org/projects/djangohmac/badge/?version=latest
+    :target: http://djangohmac.readthedocs.org/en/latest/?badge=latest

@@ -18,3 +18,5 @@ deployment:
     commands:
       - sed -e "s/<PYPI_USER>/$PYPI_USER/" -e "s/<PYPI_PASS>/$PYPI_PASS/"< .pypirc.template > ~/.pypirc
       - sudo python setup.py sdist upload -r pypi
+      - make html
+      - python setup.py upload_docs --upload-dir=docs/_build/html/

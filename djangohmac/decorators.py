@@ -12,7 +12,7 @@ def auth(only=None):
 
     .. sourcecode:: python
 
-        class SignedViewView(View):
+        class SignedView(View):
 
             @decorators.auth()
             def get(self, request):
@@ -20,7 +20,7 @@ def auth(only=None):
 
             @decorators.auth(only=['serviceA'])
             def post(self, request):
-                return HttpResponse("Only for servvice A")
+                return HttpResponse("Only for service A")
 
     """
 

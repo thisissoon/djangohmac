@@ -1,6 +1,6 @@
-'''
+"""
 Dummy django settings
-'''
+"""
 
 import os
 
@@ -32,7 +32,8 @@ MIDDLEWARE_CLASSES = (
 
 HMAC_SECRET = 'HMAC_SECRET'
 HMAC_SECRETS = {
-    'service': 'HMAC_SERVICE_SECRET'
+    'serviceA': 'HMAC_SERVICE_A_SECRET',
+    'serviceB': 'HMAC_SERVICE_B_SECRET'
 }
 # HMAC_HEADER = HMAC_HEADER
 # HMAC_DIGESTMOD = HMAC_DIGESTMOD

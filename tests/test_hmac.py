@@ -26,13 +26,13 @@ class HmacTestCase(TestCase):
     def test_valid_multiple_signatures_should_pass(self):
         signature = self.hmac.make_hmac_for('serviceA')
         request = self.factory.get('/example', **{self.header: signature})
-        assert self.hmac.validate_multiple_signatures(request)
+        assert self.hmac.validate_signature(request)
 
     def test_invalid_multiple_signatures_should_raice_exception(self):
         signature = self.hmac.make_hmac_for('serviceA', 'some data')
         request = self.factory.get('/example', **{self.header: signature})
         with self.assertRaises(InvalidSignature):
-            self.hmac.validate_multiple_signatures(request)
+            self.hmac.validate_signature(request)
 
     def test_unknown_key_name_for_multiple_signatures_should_raice_exception(self):
         with self.assertRaises(UnknownKeyName):
@@ -42,12 +42,7 @@ class HmacTestCase(TestCase):
         signature = self.hmac.make_hmac_for('serviceB')
         request = self.factory.get('/example', **{self.header: signature})
         with self.assertRaises(InvalidSignature):
-            self.hmac.validate_multiple_signatures(
+            self.hmac.validate_signature(
                 request,
                 only=['serviceA']
             )
-
-    def test_valid_signature_for_restricted_view(self):
-        signature = self.hmac.make_hmac_for('serviceA')
-        request = self.factory.get('/example', **{self.header: signature})
-        self.hmac.validate_multiple_signatures(request, only=['serviceA'])

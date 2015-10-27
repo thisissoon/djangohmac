@@ -17,11 +17,9 @@ To secure all your app with HMAC you can use a middleware.
 
     MIDDLEWARE_CLASSES = (
         # ...
-        'djangohmac.middleware.GlobalHmacMiddleware',
+        'djangohmac.middleware.HmacMiddleware',
     )
 
-
-If your application is called by multiple services and each has different secret keys you should use `djangohmac.middleware.GlobalHmacMiddleware` instead.
 
 .. note:: Middleware is applied on all views except the admin!
 

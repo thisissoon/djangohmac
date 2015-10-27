@@ -52,6 +52,18 @@ class Hmac(object):
         return six.b(settings.HMAC_SECRET)
 
     def get_signature(self, request):
+        """ Get signature from djagno requests
+
+        Arguments:
+            request: Django request
+
+        Returns:
+            string: HMAC signature
+
+        Raises:
+            SecretKeyIsNotSet
+        """
+
         try:
             return request.META['HTTP_{}'.format(self.header.upper())]
         except KeyError:
@@ -78,6 +90,9 @@ class Hmac(object):
         Arguments:
             name (str): key name from HMAC_SECRETS dict
             data (str): HMAC message
+
+        Raises:
+            UnknownKeyName
         """
         try:
             key = self.hmac_keys[name]
@@ -88,26 +103,7 @@ class Hmac(object):
         ))
         return token
 
-    def validate_signature(self, request):
-        """ Validate signature from djagno request
-
-        Arguments:
-            request (request): Django request class
-
-        Returns:
-            boolen
-        """
-        if self.hmac_disarm:
-            return True
-        hmac_token_client = self.get_signature(request)
-        hmac_token_server = self.make_hmac(request.body)
-        if hmac_token_client != hmac_token_server:
-            raise InvalidSignature('Signatures are different: {0} {1}'.format(
-                hmac_token_client, hmac_token_server
-            ))
-        return True
-
-    def _parse_multiple_signature(self, signature):
+    def _parse_signature(self, signature):
         """ Split signature to user name and signature
 
         Arguments:
@@ -123,7 +119,52 @@ class Hmac(object):
         except (TypeError, binascii.Error):
             raise InvalidSignature()
 
-    def validate_multiple_signatures(self, request, only=None):
+    def validate_signature(self, request, only=None):
+        """ Validate signate in given request.
+
+        Arguments:
+            request: Django request
+            only: list of keys from HMAC_SECRETS to restrict signatures
+
+        Returns:
+            boolean: True when signature is valid otherwice False
+
+        Raises:
+            InvalidSignature
+            SecretKeyIsNotSet
+        """
+        if self.hmac_disarm:
+            return True
+        try:
+            signature = self.get_signature(request)
+            key_name, hmac_token_client = self._parse_signature(signature)
+            if only and key_name not in only:
+                raise InvalidSignature('This view is only for {}'.format(only))
+            return self.validate_multiple_signatures(key_name, signature, request)
+        except ValueError:
+            return self.validate_single_signature(request)
+
+    def validate_single_signature(self, request):
+        """ Validate signature from djagno request
+
+        Arguments:
+            request (request): Django request class
+
+        Returns:
+            boolen
+
+        Raises:
+            InvalidSignature
+        """
+        hmac_token_client = self.get_signature(request)
+        hmac_token_server = self.make_hmac(request.body)
+        if hmac_token_client != hmac_token_server:
+            raise InvalidSignature('Signatures are different: {0} {1}'.format(
+                hmac_token_client, hmac_token_server
+            ))
+        return True
+
+    def validate_multiple_signatures(self, key_name, signature, request):
         """ Validate signature from djagno request. But it takes key from
         `HMAC_SECRETS` list
 
@@ -133,13 +174,10 @@ class Hmac(object):
 
         Returns:
             boolen
+
+        Raises:
+            InvalidSignature
         """
-        if self.hmac_disarm:
-            return True
-        signature = self.get_signature(request)
-        key_name, hmac_token_client = self._parse_multiple_signature(signature)
-        if only and key_name not in only:
-            raise InvalidSignature('This view is only for {}'.format(only))
         hmac_token_server = self.make_hmac_for(key_name, request.body)
         if signature != hmac_token_server:
             raise InvalidSignature('Signatures are different: {0} {1}'.format(

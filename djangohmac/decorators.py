@@ -28,7 +28,7 @@ def auth(only=None):
         @wraps(route)
         def _wrapped_view(view, request, *args, **kwargs):
             try:
-                shmac.validate_multiple_signatures(request, only)
+                shmac.validate_signature(request, only)
             except HmacException:
                 shmac.abort()
             return route(view, request, *args, **kwargs)

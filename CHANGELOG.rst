@@ -1,6 +1,11 @@
 Change Log
 ----------
 
+1.3.0
+~~~~~
+- Merge validation of multiple and single signature to single method
+- Replace middleware classes to one single class HmacMiddleware
+
 1.2.0
 ~~~~~
 - Decorators

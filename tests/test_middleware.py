@@ -3,14 +3,14 @@ from django.core.exceptions import PermissionDenied
 from django.test import RequestFactory, TestCase
 
 # First Party Libs
-from djangohmac.middleware import GlobalHmacMiddleware, MultipleHmacMiddleware
+from djangohmac.middleware import HmacMiddleware
 from djangohmac.sign import Hmac
 
 
-class GlobalHmacMiddlewareTestCase(TestCase):
+class SingleHmacMiddlewareTestCase(TestCase):
 
     def setUp(self):
-        self.hmacmiddleware = GlobalHmacMiddleware()
+        self.hmacmiddleware = HmacMiddleware()
         self.factory = RequestFactory()
         self.hmac = Hmac()
 
@@ -34,7 +34,7 @@ class GlobalHmacMiddlewareTestCase(TestCase):
 class MultipleHmacMiddlewareTestCase(TestCase):
 
     def setUp(self):
-        self.hmacmiddleware = MultipleHmacMiddleware()
+        self.hmacmiddleware = HmacMiddleware()
         self.factory = RequestFactory()
         self.hmac = Hmac()
 

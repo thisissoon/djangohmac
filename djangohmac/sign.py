@@ -39,8 +39,13 @@ class Hmac(object):
     def __init__(self):
         self.header = getattr(settings, 'HMAC_HEADER', 'Signature')
         self.digestmod = getattr(settings, 'HMAC_DIGESTMOD', hashlib.sha256)
-        self.hmac_disarm = getattr(settings, 'HMAC_DISABLE', False)
         self.hmac_keys = getattr(settings, 'HMAC_SECRETS', {})
+
+    @property
+    def hmac_disarm(self):
+        if hasattr(settings, 'HMAC_DISABLE'):
+            return settings.HMAC_DISABLE
+        return False
 
     @property
     def hmac_key(self):

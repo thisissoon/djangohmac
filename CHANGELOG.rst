@@ -4,6 +4,7 @@ Change Log
 1.3.1 (not released)
 ~~~~~~~~~~~~~~~~~~~~
 - Get rid of brackets in decorator
+- Bugfix: valid signature for resticted view passed validation
 
 1.3.0
 ~~~~~

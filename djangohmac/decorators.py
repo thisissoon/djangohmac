@@ -1,9 +1,9 @@
-from functools import wraps
+from functools import wraps, partial
 
 from .sign import HmacException, shmac
 
 
-def auth(only=None):
+def auth(func=None, only=None):
     """ Route decorator. Validates an incoming request can access the
     route function.
 
@@ -14,7 +14,7 @@ def auth(only=None):
 
         class SignedView(View):
 
-            @decorators.auth()
+            @decorators.auth
             def get(self, request):
                 return HttpResponse("For all services")
 
@@ -24,13 +24,14 @@ def auth(only=None):
 
     """
 
-    def decorator(route):
-        @wraps(route)
-        def _wrapped_view(view, request, *args, **kwargs):
-            try:
-                shmac.validate_signature(request, only)
-            except HmacException:
-                shmac.abort()
-            return route(view, request, *args, **kwargs)
-        return _wrapped_view
-    return decorator
+    if func is None:
+        return partial(auth, only=only)
+
+    @wraps(func)
+    def wrapper(view, request, *args, **kwargs):
+        try:
+            shmac.validate_signature(request, only)
+        except HmacException:
+            shmac.abort()
+        return func(view, request, *args, **kwargs)
+    return wrapper

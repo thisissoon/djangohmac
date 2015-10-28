@@ -142,7 +142,10 @@ class Hmac(object):
                 raise InvalidSignature('This view is only for {}'.format(only))
             return self.validate_multiple_signatures(key_name, signature, request)
         except ValueError:
-            return self.validate_single_signature(request)
+            if only is None:
+                return self.validate_single_signature(request)
+            else:
+                raise InvalidSignature('This view is only for {}'.format(only))
 
     def validate_single_signature(self, request):
         """ Validate signature from djagno request

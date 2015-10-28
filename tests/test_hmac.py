@@ -46,3 +46,12 @@ class HmacTestCase(TestCase):
                 request,
                 only=['serviceA']
             )
+
+    def test_valid_signature_for_resticted_view(self):
+        signature = self.hmac.make_hmac()
+        request = self.factory.get('/example', **{self.header: signature})
+        with self.assertRaises(InvalidSignature):
+            self.hmac.validate_signature(
+                request,
+                only=['serviceA']
+            )

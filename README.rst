@@ -21,7 +21,7 @@ Small example
 
     class SignedView(View):
 
-        @decorators.auth()
+        @decorators.auth
         def get(self, request):
             return HttpResponse("for all services")
 

@@ -71,7 +71,11 @@ class Hmac(object):
 
     def _hmac_factory(self, data, key=None, digestmod=None):
         key = six.b(key) if key else self.hmac_key
-        return hmac.new(key, data, digestmod=self.digestmod)
+        return hmac.new(
+            encode_string(key),
+            encode_string(data),
+            digestmod=self.digestmod
+        )
 
     def make_hmac(self, data='', key=None):
         """ Generates HMAC key
@@ -80,7 +84,7 @@ class Hmac(object):
             data (str): HMAC message
             key (str): secret key of another app
         """
-        hmac_token_server = self._hmac_factory(encode_string(data), key).digest()
+        hmac_token_server = self._hmac_factory(data, key).digest()
         hmac_token_server = base64.b64encode(hmac_token_server)
         return hmac_token_server
 

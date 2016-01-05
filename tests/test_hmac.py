@@ -55,3 +55,8 @@ class HmacTestCase(TestCase):
                 request,
                 only=['serviceA']
             )
+
+    def test_generate_signature_for_unicode_key(self):
+        uncode = self.hmac._hmac_factory('', key=u'unicode').digest()
+        sr = self.hmac._hmac_factory('', key='unicode').digest()
+        assert sr == uncode

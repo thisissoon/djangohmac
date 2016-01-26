@@ -17,7 +17,7 @@ version = open('./VERSION.txt').read().strip()
 
 setup(
     name='djangohmac',
-    url='https://github.com/thisissoon/django-hmac',
+    url='https://github.com/thisissoon/djangohmac',
     version=version,
     author='SOON_',
     author_email='dorks@thisissoon.com',

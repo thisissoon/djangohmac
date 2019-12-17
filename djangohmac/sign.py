@@ -186,7 +186,7 @@ class Hmac(object):
             InvalidSignature
         """
         hmac_token_server = self.make_hmac_for(key_name, request.body)
-        if signature != hmac_token_server:
+        if six.b(signature) != six.b(hmac_token_server):
             raise InvalidSignature('Signatures are different: {0} {1}'.format(
                 signature, hmac_token_server
             ))
